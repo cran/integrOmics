@@ -1,35 +1,35 @@
-#useDynLib(rCCAsPLS)
 
-export(cim, rcc, jet.colors, estim.regul, imgCor, img, mat.rank, nipals, plotIndiv, plotVar, pls, loo, Mfold, spls, vip, valid, s.match,scatterutil.base, scatterutil.eti, scatterutil.grid)
+export(cim, rcc, jet.colors, estim.regul, imgCor, 
+image.estim.regul, mat.rank, nipals, plotIndiv, plotVar, pls, loo, 
+Mfold, spls, vip, valid, s.match, scatterutil.base, 
+scatterutil.eti, scatterutil.grid, rccNet)
 
 
 S3method(cim, default)
 S3method(cim, rcc)
-S3method(rcc, default)
 
-
-S3method(imgCor, default)
-
-S3method(estim.regul, default)
-S3method(img, estim.regul)
+S3method(image, estim.regul)
 
 S3method(plot, rcc)
 
 S3method(plotIndiv, pls)
+S3method(plotIndiv, spls)
 S3method(plotIndiv, rcc)
 
 S3method(plotVar, pls)
+S3method(plotVar, spls)
 S3method(plotVar, rcc)
 
 S3method(predict, pls)
+S3method(predict, spls)
 
 S3method(summary, pls)
-#S3method(summary, spls)
+S3method(summary, spls)
 S3method(summary, rcc)
 
 S3method(print, pls)
 S3method(print, spls)
-
+S3method(print, rcc)
 S3method(print, summary)
 
 

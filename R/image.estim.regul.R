@@ -20,15 +20,12 @@
 
 
 
-
-`img` <- function(object, ...) UseMethod("img")
-
-`img.estim.regul` <-
-function(object, col = heat.colors, ...) 
+`image.estim.regul` <-
+function(x, col = heat.colors, ...) 
 {
-    grid1 = object$grid1
-    grid2 = object$grid2
-    mat = object$mat
+    grid1 = x$grid1
+    grid2 = x$grid2
+    mat = x$mat
     nlevel = min(255, length(c(unique(mat))))
 if (nlevel / 2 - trunc(nlevel / 2) == 0 & nlevel > 6) nlevel = nlevel + 1
 col = col(nlevel)

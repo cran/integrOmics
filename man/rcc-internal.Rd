@@ -1,5 +1,5 @@
 \name{rcc-internal}
-
+\encoding{latin1}
 \alias{loo}
 \alias{Mfold}
 

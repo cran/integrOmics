@@ -1,5 +1,5 @@
 \name{jet.colors}
-
+\encoding{latin1}
 \alias{jet.colors}
 
 \title{Jet Colors Palette}

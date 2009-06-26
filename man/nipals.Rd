@@ -43,7 +43,7 @@ The returned value is a list with components:
 }
 
 \references{
-Tenenhaus, M. (1998). \emph{La r\'egression PLS: th\'eorie et pratique}. Paris: Editions Technic.
+Tenenhaus, M. (1998). \emph{La régression PLS: théorie et pratique}. Paris: Editions Technic.
 
 Wold H. (1966). Estimation of principal components and related models by iterative least squares. 
 In: Krishnaiah, P. R. (editors), \emph{Multivariate Analysis}. Academic Press, N.Y., 391-420.

@@ -11,7 +11,8 @@ two data sets.
 }
 
 \usage{
-	\method{imgCor}{default}(X, Y, type = c("combine", "separated"), col = jet.colors(64), ...)
+imgCor(X, Y, type = c("combine", "separated"), 
+       col = jet.colors(64), ...)
 }
 
 \arguments{
@@ -34,14 +35,14 @@ three correlation matrices are computed, \code{cor(X)}, \code{cor(Y)} and
 \code{cor(X,Y)} and plotted separately on the same device. In both cases, 
 a color correlation scales strip is plotted.
 
-The correlation matrices are pre-processed before calling the \code{img} 
+The correlation matrices are pre-processed before calling the \code{imgCor} 
 function in order to get, as in the numerical representation, the diagonal 
 from upper-left corner to bottom-right one.
 }
 
 \author{Sébastien Déjean and Ignacio González.}
 
-\seealso{\code{\link{cor}}, \code{\link{img}}, \code{\link{jet.colors}}.}
+\seealso{\code{\link{cor}}, \code{\link{image}}, \code{\link{jet.colors}}.}
 
 \examples{
 data(nutrimouse)

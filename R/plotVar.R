@@ -25,8 +25,9 @@
 
 `plotVar` <-
 function(object, ...) UseMethod("plotVar")
-#------------------------ PLS ---------------------
-`plotVar.pls` <-
+
+#------------------------ PLS ---------------------
+`plotVar.pls` <- `plotVar.spls` <- 
 function(object, comp1 = 1, comp2 = 2, rad.in = 0.5, 
         X.label = FALSE, Y.label = FALSE, keep.var = FALSE, 
         pch = NULL, cex = NULL, col = NULL, font = NULL, ...) 
@@ -394,4 +395,5 @@ cex = cex[[2]], col = col[[2]])
   
 par(def.par)  
 }
-
+
+

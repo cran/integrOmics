@@ -3,7 +3,7 @@
 \alias{plotIndiv}
 \alias{plotIndiv.rcc}
 \alias{plotIndiv.pls}
-%\alias{plotIndiv.spls}
+\alias{plotIndiv.spls}
 
 
 \title{Plot of Individuals (Experimental Units)}
@@ -18,16 +18,16 @@ representation in (r)CCA and (s)PLS regression.
           rep.space = c("X-variate", "Y-variate", "XY-variate"),
           x.label = NULL, y.label = NULL,
           col = "black", cex = 1, pch = 1, \ldots)
-		
+	  
 \method{plotIndiv}{pls}(object, comp1 = 1, comp2 = 2, ind.names = TRUE,
           rep.space = c("X-variate", "Y-variate", "XY-variate"),
           x.label = NULL, y.label = NULL,  
           col = "black", cex = 1, pch = 1, \ldots)	
 
-%\method{plotIndiv}{spls}(object, comp1 = 1, comp2 = 2, ind.names = TRUE,
-%          rep.space = c("X-variate", "Y-variate", "XY-variate"),
-%          x.label = NULL, y.label = NULL,  
-%          col = "black", cex = 1, pch = 1, \ldots)		  
+\method{plotIndiv}{spls}(object, comp1 = 1, comp2 = 2, ind.names = TRUE,
+          rep.space = c("X-variate", "Y-variate", "XY-variate"),
+          x.label = NULL, y.label = NULL,  
+          col = "black", cex = 1, pch = 1, \ldots)		  
 }
 
 \arguments{
@@ -90,8 +90,8 @@ legend(-2.45, -1.21, c("WT", "PPAR"), pch = c(16, 16),
 data(liver.toxicity)
 X <- liver.toxicity$gene
 Y <- liver.toxicity$clinic
-toxicity.spls <- spls(X, Y, ncomp = 3, keep.X = c(50, 50, 50), 
-                      keep.Y = c(10, 10, 10))
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(50, 50, 50), 
+                      keepY = c(10, 10, 10))
 		  
 col <- rep(c("blue", "red", "darkgreen", "darkviolet"), c(16, 16, 16, 16))
 cex <- rep(c(1, 1.2, 1, 1.4), c(16, 16, 16, 16))

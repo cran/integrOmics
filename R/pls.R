@@ -31,11 +31,13 @@ if (length(dim(X)) != 2)
         stop("'X' must be a numeric matrix.")
 
 X = as.matrix(X)
-
-if (length(dim(Y)) == 0)
-Y = as.matrix(Y, ncol = 1)
-else
 Y = as.matrix(Y)
+
+
+#if (length(dim(Y)) == 0)
+#Y = as.matrix(Y, ncol = 1)
+#else
+#Y = as.matrix(Y)
 
 if (!is.numeric(X) || !is.numeric(Y)) 
         stop("'X' and/or 'Y' must be a numeric matrix.")

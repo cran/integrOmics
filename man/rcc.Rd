@@ -11,7 +11,7 @@ to seek correlations between two data matrices.
 }
 
 \usage{
-	\method{rcc}{default}(X, Y, lambda1 = 0, lambda2 = 0, ...)
+rcc(X, Y, lambda1 = 0, lambda2 = 0, ...)
 }
 
 \arguments{
@@ -42,7 +42,7 @@ Such a regularization in this context
 was first proposed by Vinod (1976), then developped by Leurgans \emph{et al.} (1993). 
 It consists in the regularization of the empirical covariances matrices of  
 \eqn{X} and \eqn{Y} by adding a multiple of the matrix identity, that is,
-cov\eqn{(X)+ \lambda_1 I} and cov\eqn{(Y)+ \lambda_2 I}.
+Cov\eqn{(X)+ \lambda_1 I} and Cov\eqn{(Y)+ \lambda_2 I}.
 
 When \code{lambda1=0} and \code{lambda2=0}, \code{rcc} perform classic
 CCA, if posible.
@@ -56,6 +56,7 @@ the use of data missing.
 contains the following components:
   \item{X}{the original \eqn{X} data.}
   \item{Y}{the original \eqn{Y} data.}
+  \item{lambda}{a vector containing the regularization parameters.}
   \item{cor}{a vector containing the canonical correlations.}
   \item{loadings}{list containing the estimated loadings for the \eqn{X} and 
 	\eqn{Y} canonical variates.}

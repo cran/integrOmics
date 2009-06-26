@@ -36,8 +36,8 @@ function(
 	tol = 1e-06,
         criterion = c('rmsep', 'q2'), 
 	method = c('pls', 'spls'),
-	keep.X = if(method =='pls') NULL else c(rep(ncol(X), ncomp)),
-	keep.Y = if(method =='pls') NULL else c(rep(ncol(Y), ncomp)),
+	keepX = if(method =='pls') NULL else c(rep(ncol(X), ncomp)),
+	keepY = if(method =='pls') NULL else c(rep(ncol(Y), ncomp)),
 	validation = c('loo', 'Mfold'),
 	M = if(validation == 'Mfold') 10 else nrow(X)
 	){
@@ -48,8 +48,17 @@ if (missing(method)) stop("Choose a method: 'pls' or 'spls' ")
 if (missing(criterion)) stop("Choose a validation criterion")
 if (missing(mode)) stop("Choose a mode")
 if (mode == 'canonical') stop("Only regression, classic or invariant mode are allowed !")
-if ( (method == 'spls') & (mode == 'invariant')) stop("No invariant mode with sPLS")
+if ((method == 'spls') & (mode == 'invariant')) stop("No invariant mode with sPLS")
 
+
+if (length(dim(X)) != 2) 
+stop("'X' must be a numeric matrix.")
+
+X = as.matrix(X)
+Y = as.matrix(Y)
+
+if (!is.numeric(X) || !is.numeric(Y)) 
+stop("'X' and/or 'Y' must be a numeric matrix.")
 
 
 n = nrow(X)
@@ -84,9 +93,12 @@ Y = scale(Y, center = TRUE, scale = TRUE)
 
 
 #compute B.hat for all variables to compute RSS
-if(criterion =='q2'){
+if(any(criterion =='q2')){
 
-if(method == 'pls') {object = pls(X = X , Y = Y, ncomp = ncomp, mode = mode, max.iter = max.iter, tol = tol)} else {object = spls(X = X , Y = Y, ncomp = ncomp, mode = mode, max.iter = max.iter, tol = tol, keep.X = keep.X, keep.Y = keep.Y)}
+if(method == 'pls') {object = pls(X = X , Y = Y, ncomp = ncomp, mode = mode, max.iter = max.iter, tol = tol)} 
+else 
+{object = spls(X = X , Y = Y, ncomp = ncomp, mode = mode, 
+max.iter = max.iter, tol = tol, keepX = keepX, keepY = keepY)}
 
 a.all = object$loadings$X
 b.all = object$loadings$Y
@@ -94,7 +106,8 @@ c.all = object$mat.c
 
 for (h in 1:ncomp) {
 	W.all = a.all[, 1:h] %*% solve(t(c.all[, 1:h]) %*% a.all[, 1:h]) 
-	B.all[,,h] = W.all %*% t(b.all[, 1:h])   
+##	B.all[,,h] = W.all %*% t(b.all[, 1:h])       #changed to deal with q=1 :
+	if(q==1){B.all[,,h] = W.all %*% as.vector(t(b.all[, 1:h]))} else {B.all[,,h] = W.all %*% t(b.all[, 1:h])}
 #	Y.all[,,h] = X %*% B.all[,,h] + colMeans(Y)
 	Y.all[,,h] = X %*% B.all[,,h]
 
@@ -112,7 +125,7 @@ for(i in 1:M){
 
 if(validation=='Mfold'){
 	X.train = X[fold!=i,]
-	Y.train = Y[fold!=i,]
+	Y.train = Y[c(fold!=i),]
 	X.test = X[fold==i,]
 }
 
@@ -123,7 +136,11 @@ if(validation=='loo'){
 }
 
 # -- pls or spls
-if(method == 'pls') {object = pls(X = X.train , Y = Y.train, ncomp = ncomp, mode = mode, max.iter = max.iter, tol = tol)} else {object = spls(X = X.train , Y = Y.train, ncomp = ncomp, mode = mode, max.iter = max.iter, tol = tol, keep.X = keep.X, keep.Y = keep.Y)}
+if(method == 'pls') {object = pls(X = X.train , Y = Y.train, ncomp = ncomp, 
+mode = mode, max.iter = max.iter, tol = tol)} 
+else 
+{object = spls(X = X.train , Y = Y.train, ncomp = ncomp, 
+mode = mode, max.iter = max.iter, tol = tol, keepX = keepX, keepY = keepY)}
 
 a = object$loadings$X
 b = object$loadings$Y
@@ -131,8 +148,8 @@ c = object$mat.c
 
 for(h in 1:ncomp){
 	W = a[, 1:h] %*% solve(t(c[, 1:h]) %*% a[, 1:h]) 
-	B.hat[,,h] = W %*% t(b[, 1:h])   
-	Y.hat.rmsep[fold==i,,h] = X.test %*% B.hat[,,h] + colMeans(Y.train)   #to be consistent with pls package
+	if(q==1){B.hat[,,h] = W %*% as.vector(t(b[, 1:h]))} else {B.hat[,,h] = W %*% t(b[, 1:h])}
+	Y.hat.rmsep[fold==i,,h] = X.test %*% B.hat[,,h] + colMeans(as.matrix(Y.train))   #to be consistent with pls package
 	Y.hat.press[fold==i,,h] = X.test %*% B.hat[,,h]                       #to be consistent with Tenenhaus
 	
 	PRESS[, h] = apply((Y - Y.hat.press[,,h])^2, 2, sum)  # on test data
@@ -143,12 +160,12 @@ for(h in 1:ncomp){
 
 
 # ----compute RMSEP --------------------
-if(criterion =='rmsep'){
+if(any(criterion =='rmsep')){
 ##Y.c = scale(Y, center = TRUE, scale = TRUE)
 rmsep.mat = matrix(nrow=q, ncol=ncomp)
 for (j in 1:q){
 #	rmsep.mat[j,] = sqrt(colMeans((Y.hat.rmsep[,j,1:ncomp] - Y.c[,j])^2))
-	rmsep.mat[j,] = sqrt(colMeans((Y.hat.rmsep[,j,1:ncomp] - Y[,j])^2))
+	if(ncomp==1) {rmsep.mat[j,] = sqrt(mean((Y.hat.rmsep[,j,1] - Y[,j])^2))} else {rmsep.mat[j,] = sqrt(colMeans((Y.hat.rmsep[,j,1:ncomp] - Y[,j])^2))}
 	}
 
 intercept = sqrt(mean((Y[,1])^2))
@@ -159,15 +176,15 @@ rownames(rmsep.mat) = colnames(Y)
 
 
 # ----- compute q2 --------------------
-if(criterion =='q2'){
+if(any(criterion =='q2')){
 
-RSS.0 = cbind(rep(n - 1, q), RSS[, -ncomp])
+if(q==1){RSS.0 = c(rep(n - 1, q), RSS[, -ncomp])}else{RSS.0 = cbind(rep(n - 1, q), RSS[, -ncomp])}
 
 # --q2 = 1 - PRESS/RSS
-q2 = 1- apply(PRESS, 2, sum)/apply(RSS.0, 2, sum)
+if(q==1){q2 = 1- PRESS/RSS.0}else{q2 = 1- apply(PRESS, 2, sum)/apply(RSS.0, 2, sum)}
 
 # --q2V = 1 - PRESS/RSS   option 1
-q2V = 1- PRESS/RSS.0
+q2V = 1- PRESS/RSS.0      #if q=1, then q2V = q2
 
 
 #sumPRESS = apply(PRESS, 1, sum)  # ici il fallait sum sur les colonnes !
@@ -179,11 +196,13 @@ q2V = 1- PRESS/RSS.0
 
 
 
-rownames(q2V) = rownames(q2Vcum) = colnames(Y)
+if(q!=1){rownames(q2V) = rownames(q2Vcum) = colnames(Y)}
 rownames(PRESS) = rownames(RSS) = colnames(Y)
-colnames(q2V) = colnames(q2Vcum) = paste("comp", 1:ncomp)
+###if(q==1){names(q2V) = paste("comp", 1:ncomp)}else{colnames(q2) = paste("comp", 1:ncomp)}
+##colnames(q2V) = colnames(q2Vcum) = paste("comp", 1:ncomp)
 colnames(PRESS) = colnames(RSS) = paste("comp", 1:ncomp)
-names(q2) = names(q2cum) = paste("comp", 1:ncomp)
+if(q==1){colnames(q2) = colnames(q2V) = paste("comp", 1:ncomp)}else{names(q2) = colnames(q2V) = paste("comp", 1:ncomp)}
+##names(q2) = names(q2cum) = paste("comp", 1:ncomp)
 
 }  #end if
 
@@ -191,15 +210,12 @@ names(q2) = names(q2cum) = paste("comp", 1:ncomp)
 return(invisible(list(
 Y.hat = Y.hat.rmsep, 
 fold=fold,
-if (criterion == 'rmsep') rmsep = rmsep.mat else NULL, 
-if (criterion == 'q2') { 
-	list(RSS=RSS, 
-	PRESS=PRESS, 
-	q2 = q2,
-	q2V = q2V)    #, 
+rmsep = if (any(criterion == 'rmsep')) rmsep.mat else NULL, 
+Q2 = if (any(criterion == 'q2')) { list(RSS=RSS, PRESS=PRESS, q2 = q2, q2V = q2V)} else NULL 
+
 ##	q2Vcum = q2Vcum,            #remove? 
 ##	q2cum = q2cum)              #remove?
-	} else NULL  
+
 )))
 }
 

@@ -14,14 +14,14 @@ for forty mice.
 
 \usage{data(nutrimouse)}
 
-\section{Format}{
-\itemize{
-	A list containing the following components:
-	    \item \code{gene} data frame with 40 observations on 120 numerical variables. 
-	    \item \code{lipid} data frame with 40 observations on 21 numerical variables. 
-	    \item \code{diet} factor of 5 levels containing 40 labels for the diet factor.
-	    \item \code{genotype} factor of 2 levels containing 40 labels for the diet factor.
-	}
+\format{
+A list containing the following components:
+  \describe{
+    \item{\code{gene}}{data frame with 40 observations on 120 numerical variables.}
+    \item{\code{lipid}}{data frame with 40 observations on 21 numerical variables.}
+	\item{\code{diet}}{factor of 5 levels containing 40 labels for the diet factor.}
+	\item{\code{genotype}}{factor of 2 levels containing 40 labels for the diet factor.}
+  }
 }
 
 \details{
@@ -55,7 +55,7 @@ Agronomic Research, French.
 }
 
 \references{
-Martin, P. G. P., Guillou, H., Lasserre, F., D\'ejean, S., Lan, A., 
+Martin, P. G. P., Guillou, H., Lasserre, F., Déjean, S., Lan, A., 
 Pascussi, J.-M., San Cristobal, M., Legrand, P., Besse, P. and Pineau, T. (2007). 
 Novel aspects of PPAR\eqn{\alpha}-mediated regulation of lipid and xenobiotic 
 metabolism revealed through a multrigenomic study. \emph{Hepatology} \bold{54}, 767-777.

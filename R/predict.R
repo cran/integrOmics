@@ -22,78 +22,70 @@
 
 ## includes predict.pls, and predict.spls
 
-#`predict` <-
-#function(object, ...) UseMethod("predict")
-
-
 # ----------------------------PLS or sPLS ---------------------------
-`predict.pls` <-
+`predict.pls` <- `predict.spls` <-
 function(object, newdata, ...)
 {
-if (missing(newdata))
-stop("No new data available.")
+    if (missing(newdata))
+    stop("No new data available.")
 
-X = object$X
-Y = object$Y
-q = ncol(Y)
-p = ncol(X)
-mode = object$mode
+    X = object$X
+    Y = object$Y
+    q = ncol(Y)
+    p = ncol(X)
+    mode = object$mode
 
-# ---warnings --------------
-if (length(dim(newdata)) == 2) {
-if (ncol(newdata) != p)
-stop("'newdata' must be a numeric matrix with ncol = ", p, 
-" or a vector of length = ", p, ".")
+    # ---warnings --------------
+    if (length(dim(newdata)) == 2) {
+        if (ncol(newdata) != p)
+            stop("'newdata' must be a numeric matrix with ncol = ", p, 
+            " or a vector of length = ", p, ".")
+    }
+
+    if (length(dim(newdata)) == 0) {
+        if (length(newdata) != p)
+            stop("'newdata' must be a numeric matrix with ncol = ", p, 
+            " or a vector of length = ", p, ".")
+        dim(newdata) = c(1, p) 
+    }
+
+    if (mode == 'canonical') stop("Only regression, 'classic' or 'invariant' mode are allowed !")
+
+    ncomp = object$ncomp
+    a = object$loadings$X
+    b = object$loadings$Y
+    c = object$mat.c
+
+    means.X = attr(X, "scaled:center")
+    means.Y = attr(Y, "scaled:center")
+    sigma.X = attr(X, "scaled:scale")
+    sigma.Y = attr(Y, "scaled:scale")
+
+    newdata = as.matrix(newdata)
+    ones = matrix(rep(1, nrow(newdata)), ncol = 1)
+    #coeff de regression 
+    B.hat = array(0, dim = c(p, q, ncomp))
+    #prediction
+    Y.hat = array(0, dim = c(nrow(newdata), q, ncomp))
+    #variates
+    t.pred = array(0, dim = c(nrow(newdata), ncomp))
+
+    for(h in 1:ncomp){
+	    W = a[, 1:h] %*% solve(t(c[, 1:h]) %*% a[, 1:h]) 	
+	    B = W %*% drop(t(b[, 1:h]))   
+	    B = scale(B, center = FALSE, scale = 1 / sigma.Y)
+	    B = as.matrix(scale(t(B), center = FALSE, scale = sigma.X))		
+	    intercept = -scale(B, center = FALSE, scale = 1 / means.X)
+	    intercept = matrix(apply(intercept, 1, sum) + means.Y, nrow = 1)
+	    Y.hat[, , h] = newdata %*% t(B) + ones %*% intercept
+	    t.pred[, h] = scale(newdata, center = means.X, scale = sigma.X) %*% W[, h]
+		B.hat[, , h] = B
+    }  #end h
+
+    rownames(t.pred) = rownames(newdata)
+    colnames(t.pred) = paste("dim", c(1:ncomp), sep = " ")
+    rownames(Y.hat) = rownames(newdata)
+    colnames(Y.hat) = colnames(Y)
+
+    return(invisible(list(predict = Y.hat, variates = t.pred)))
 }
-
-if (length(dim(newdata)) == 0) {
-if (length(newdata) != p)
-stop("'newdata' must be a numeric matrix with ncol = ", p, 
-" or a vector of length = ", p, ".")
-}
-
-if (mode == 'canonical') stop("Only regression, classic or invariant mode are allowed !")
-
-
-
-
-ncomp = object$ncomp
-a = object$loadings$X
-b = object$loadings$Y
-c = object$mat.c
-
-means.X = attr(X, "scaled:center")
-sigma.X = attr(X, "scaled:scale")
-
-
-#coeff de regression 
-B.hat <- array(0, dim = c(p, q, ncomp))
-#prediction
-Y.hat <- array(0, dim = c(nrow(newdata), q, ncomp))
-#variates
-t.pred = array(0, dim = c(nrow(newdata), ncomp))
-
-
-#-- center and scale the new data --#
-#newdata = scale(newdata, center = TRUE, scale = TRUE)
-newdata = scale(newdata, center = means.X, scale = sigma.X)
-
-for(h in 1:ncomp){
-	W = a[, 1:h] %*% solve(t(c[, 1:h]) %*% a[, 1:h]) 
-	B.hat[,,h] = W %*% t(b[, 1:h])   
-	Y.hat[,,h] = newdata %*% B.hat[,,h] + colMeans(as.matrix(Y))
-	t.pred[,h] = newdata %*% W[,h]
-#	t.pred[,h] = scale(newdata, center = means.X, scale = sigma.X) %*% W[,h]
-#	t.pred[,h] = t.pred[,h] / drop(crossprod(t.pred[,h]))
-}  #end h
-
-
-rownames(t.pred) = rownames(newdata)
-colnames(t.pred) = paste('dim', c(1:ncomp), sep=' ')
-colnames(Y.hat) = colnames(Y)
-
-return(invisible(list(Y.hat = Y.hat, variates = t.pred)))
-}
-
-
-

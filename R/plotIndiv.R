@@ -27,7 +27,7 @@
 function(object, ...) UseMethod("plotIndiv")
 
 # --------------------------------- PLS/sPLS ---------------------------
-`plotIndiv.pls` <-
+`plotIndiv.pls` <- `plotIndiv.spls` <- 
 function(object, comp1 = 1, comp2 = 2, ind.names = TRUE,
 rep.space = c("X-variate", "Y-variate", "XY-variate"),
 x.label = NULL, y.label = NULL,  
@@ -151,4 +151,5 @@ abline(v = 0, h = 0, lty = 2)
 }
 }
 }
-
+
+

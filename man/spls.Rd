@@ -1,7 +1,6 @@
 \name{spls}
 \encoding{latin1}
 \alias{spls}
-\alias{print.spls}
 
 \title{Sparse Partial Least Squares (sPLS)}
 
@@ -12,9 +11,8 @@ in a one-step strategy.
 
 \usage{
 spls(X, Y, ncomp = 3, mode = c("regression", "canonical"),
-	max.iter = 500, tol = 1e-06, keep.X = c(rep(ncol(X), ncomp)), keep.Y = c(rep(ncol(Y), ncomp)))
-
-\method{print}{spls}(x, ...)
+     max.iter = 500, tol = 1e-06, keepX = c(rep(ncol(X), ncomp)), 
+     keepY = c(rep(ncol(Y), ncomp)))
 }	
 
 \arguments{
@@ -27,11 +25,10 @@ spls(X, Y, ncomp = 3, mode = c("regression", "canonical"),
     one of \code{"regression"} or \code{"canonical"}. See Details.}
   \item{max.iter}{integer, the maximum number of iterations.}
   \item{tol}{a positive real, the tolerance used in the iterative algorithm.}
-  \item{keep.X}{numeric vector of length \code{ncomp}, the number of variables
+  \item{keepX}{numeric vector of length \code{ncomp}, the number of variables
    to keep in \eqn{X}-loadings. By default all variables are kept in the model.}
-  \item{keep.Y}{numeric vector of length \code{ncomp}, the number of variables
+  \item{keepY}{numeric vector of length \code{ncomp}, the number of variables
    to keep in \eqn{Y}-loadings. By default all variables are kept in the model.}
-  \item{x}{a spls object for the print method.}
   \item{...}{not used currently.}
 }
 
@@ -77,7 +74,7 @@ Biology} \bold{7}, article 35.
 Shen, H. and Huang, J. Z. (2008). Sparse principal component analysis via regularized 
 low rank matrix approximation. \emph{Journal of Multivariate Analysis} \bold{99}, 1015-1034.    
 
-Tenenhaus, M. (1998). \emph{La r\'egression PLS: th\'eorie et pratique}. Paris: Editions Technic.
+Tenenhaus, M. (1998). \emph{La régression PLS: théorie et pratique}. Paris: Editions Technic.
 
 Wold H. (1966). Estimation of principal components and related models by iterative least squares. 
 In: Krishnaiah, P. R. (editors), \emph{Multivariate Analysis}. Academic Press, N.Y., 391-420.
@@ -93,8 +90,8 @@ data(liver.toxicity)
 X <- liver.toxicity$gene
 Y <- liver.toxicity$clinic
 
-toxicity.spls <- spls(X, Y, ncomp = 3, keep.X = c(50, 50, 50), 
-                      keep.Y = c(10, 10, 10))
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(50, 50, 50), 
+                      keepY = c(10, 10, 10))
 }
 
 \keyword{regression}

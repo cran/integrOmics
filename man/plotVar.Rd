@@ -3,7 +3,7 @@
 \alias{plotVar}
 \alias{plotVar.rcc}
 \alias{plotVar.pls}
-%\alias{plotVar.spls}
+\alias{plotVar.spls}
 
 \title{Plot of Variables}
 
@@ -20,9 +20,9 @@ This function provides variables representation for (regularized) CCA and (spars
         X.label = FALSE, Y.label = FALSE, keep.var = FALSE, 
         pch = NULL, cex = NULL, col = NULL, font = NULL, ...)	
 
-%\method{plotVar}{spls}(object, comp1 = 1, comp2 = 2, rad.in = 0.5, 
-%        X.label = FALSE, Y.label = FALSE, keep.var = FALSE, 
-%        pch = NULL, cex = NULL, col = NULL, font = NULL, ...)	 
+\method{plotVar}{spls}(object, comp1 = 1, comp2 = 2, rad.in = 0.5, 
+        X.label = FALSE, Y.label = FALSE, keep.var = FALSE, 
+        pch = NULL, cex = NULL, col = NULL, font = NULL, ...)	 
 }
 
 \arguments{
@@ -85,8 +85,8 @@ plotVar(nutri.res, comp1 = 1, comp2 = 2, cutoff = 0.5,
 data(liver.toxicity)
 X <- liver.toxicity$gene
 Y <- liver.toxicity$clinic
-toxicity.spls <- spls(X, Y, ncomp = 3, keep.X = c(50, 50, 50), 
-                      keep.Y = c(10, 10, 10))
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(50, 50, 50), 
+                      keepY = c(10, 10, 10))
 	
 plotVar(toxicity.spls, comp1 = 1, comp2 = 2, keep.var = TRUE, 
         Y.label = TRUE)	

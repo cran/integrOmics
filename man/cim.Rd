@@ -13,7 +13,6 @@ represent "high-dimensional" data sets.
 
 \usage{
 \method{cim}{default}(mat, breaks, col = jet.colors, 
-%cim(mat, breaks, col = jet.colors,
     labRow = NULL, labCol = NULL, symkey = TRUE, zoom = FALSE, 
     main = NULL, xlab = NULL, ylab = NULL, keysize = 1, 
     cexRow = min(1, 0.2 + 1/log10(nr)), 
@@ -101,7 +100,7 @@ and Paull, K. D. (1997). An information-intensive approach to the molecular
 pharmacology of cancer. \emph{Science} \bold{275}, 343-349.
 }
 
-\author{SÃ©bastien D\'ejean and Ignacio Gonz\'alez.}
+\author{Sébastien Déjean and Ignacio González.}
 
 \seealso{\code{\link{image}}, \code{\link{heatmap}}, \code{\link{hclust}}.}
 

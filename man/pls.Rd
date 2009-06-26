@@ -1,7 +1,6 @@
 \name{pls}
 \encoding{latin1}
 \alias{pls}
-\alias{print.pls}
 
 \title{Partial Least Squares (PLS) Regression}
 
@@ -10,10 +9,9 @@
 }
 
 \usage{
-	pls(X, Y, ncomp = 3, mode = c("regression", "canonical", "invariant", "classic"),
-	max.iter = 500, tol = 1e-06)
-
-\method{print}{pls}(x, ...)
+pls(X, Y, ncomp = 3, 
+    mode = c("regression", "canonical", "invariant", "classic"), 
+    max.iter = 500, tol = 1e-06)
 }	
 
 \arguments{
@@ -27,7 +25,6 @@
 	See Details.}
   \item{max.iter}{integer, the maximum number of iterations.}
   \item{tol}{a not negative real, the tolerance used in the iterative algorithm.}
-  \item{x}{a pls object for the print method.}
   \item{...}{not used currently.}
 
 }
@@ -62,7 +59,7 @@ that contains the following components:
 }
 
 \references{
-Tenenhaus, M. (1998). \emph{La r\'egression PLS: th\'eorie et pratique}. Paris: Editions Technic.
+Tenenhaus, M. (1998). \emph{La régression PLS: théorie et pratique}. Paris: Editions Technic.
 
 Wold H. (1966). Estimation of principal components and related models by iterative least squares. 
 In: Krishnaiah, P. R. (editors), \emph{Multivariate Analysis}. Academic Press, N.Y., 391-420.

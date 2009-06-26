@@ -19,11 +19,11 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
+#"rcc" <-
+#function(...) UseMethod("rcc")
+
+
 "rcc" <-
-function(...) UseMethod("rcc")
-
-
-"rcc.default" <-
 function(X, Y, lambda1 = 0, lambda2 = 0, ...) 
 {
 # validation des arguments #
@@ -97,7 +97,10 @@ names(cor) = 1:length(cor)
 
 # valeurs sortantes #
 #-------------------#
-    result = list(X = X, Y = Y, cor = cor,
+cl = match.call()
+cl[[1]] = as.name('rcc')
+
+    result = list(call = cl, X = X, Y = Y, lambda = c(lambda1, lambda2), cor = cor,
 loadings = list(X = xcoef, Y = ycoef),
 variates = list(X = U, Y = V), 
 names = list(X = X.names, Y = Y.names, 

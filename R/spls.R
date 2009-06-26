@@ -18,10 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-
-
-
-
 `spls` <-
 function(
 	X, 
@@ -30,14 +26,14 @@ function(
 	mode = c("regression", "canonical"),
 	max.iter = 500, 
 	tol = 1e-06,
-	keep.X = c(rep(ncol(X), ncomp)), 
-	keep.Y = c(rep(ncol(Y), ncomp))
+	keepX = c(rep(ncol(X), ncomp)), 
+	keepY = c(rep(ncol(Y), ncomp))
 	)
 {
 
 mode = match.arg(mode)
 
-##if (missing(keep.X) & missing(keep.Y)) {
+##if (missing(keepX) & missing(keepY)) {
 ##result = pls(X, Y, ncomp = ncomp, max.iter = max.iter, tol = tol, mode = mode)
 ##}
 ##else {
@@ -64,10 +60,9 @@ stop("unequal number of rows in 'X' and 'Y'.")
 if (is.null(ncomp) || !is.numeric(ncomp) || ncomp <= 0)
 stop("invalid number of variates, 'ncomp'")
 
-if(ncomp > p) {
-stop("Reset maximum number of variates 'ncomp' to rank(X).")
-ncomp = mat.rank(X)$rank
-}
+if(ncomp > p) 
+stop("the number of variates 'ncomp' must be lower or equal than ", p, ".", 
+call. = FALSE)
 
 #-- initialisation des matrices --#
 X.names = dimnames(X)[[2]]
@@ -87,23 +82,19 @@ ind.names = 1:n
 rownames(X) = rownames(Y) = ind.names
 }
 
-if (length(keep.X) != ncomp) 
-stop("length of 'keep.X' must be equal to ", ncomp)
+if (length(keepX) != ncomp) 
+stop("length of 'keepX' must be equal to ", ncomp)
 
-if (length(keep.Y) != ncomp) 
-stop("length of 'keep.Y' must be equal to ", ncomp)
+if (length(keepY) != ncomp) 
+stop("length of 'keepY' must be equal to ", ncomp)
 
-if (any(keep.X > p)) {
-stop("Reset the components of 'keep.X' > ", p, " to ", p, ".",
+if (any(keepX > p)) 
+stop("each component of 'keepX' must be lower or equal than ", p, ".",
 call. = FALSE)
-keep.X[keep.X > p] = p
-}
 
-if (any(keep.Y > q)) {
-stop("Reset the components of 'keep.Y' > ", q, " to ", q, ".",
+if (any(keepY > q)) 
+stop("each component of 'keepY' must be lower or equal than ", q, ".",
 call. = FALSE)
-keep.Y[keep.Y > q] = q
-}
 
 #-- centrer et réduire les données --#
 X = scale(X, center = TRUE, scale = TRUE)
@@ -126,8 +117,8 @@ mat.d = matrix(nrow = q, ncol = ncomp)
 
 #-- boucle sur h --#
 for (h in 1:ncomp) {
-nx = p - keep.X[h]
-ny = q - keep.Y[h]
+nx = p - keepX[h]
+ny = q - keepY[h]
 
 #-- svd de M = t(X)*Y --#
 M = crossprod(X.temp, Y.temp)
@@ -225,8 +216,8 @@ cl[[1]] = as.name('spls')
 result = list(
 call = cl,
 X = X, Y = Y, ncomp = ncomp, mode = mode, 
-keepX = keep.X,
-keepY = keep.Y,
+keepX = keepX,
+keepY = keepY,
 mat.c = mat.c, mat.t = mat.t, 
 variates = list(X = mat.t, Y = mat.u),
 loadings = list(X = mat.a, Y = mat.b),
@@ -234,6 +225,6 @@ names = list(X = X.names, Y = Y.names, indiv = ind.names))
 
 class(result) = c("spls", "pls") 
 return(invisible(result))
-##}  #end if keep.X
+##}  #end if keepX
 }
 

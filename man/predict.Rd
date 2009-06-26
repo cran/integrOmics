@@ -1,7 +1,7 @@
 \name{predict}
 \encoding{latin1}
-\alias{predict}
 \alias{predict.pls}
+\alias{predict.spls}
 
 \title{Predict Method for PLS Regression and Sparse PLS}
 
@@ -12,8 +12,8 @@ variates are predicted using a fitted model and a new matrix of observations.
 
 \usage{
 \method{predict}{pls}(object, newdata, ...)
-%\method{predict}{spls}(object, newdata, ...)
-%predict(object, newdata, ...)
+
+\method{predict}{spls}(object, newdata, ...)
 }
 
 \arguments{
@@ -26,20 +26,18 @@ variates are predicted using a fitted model and a new matrix of observations.
 \details{
 \code{predict} produces predicted values, obtained by evaluating the PLS  
 model returned by \code{pls} or \code{spls} in the frame \code{newdata}. 
-
-The intercept is always included in the predictions. 
 Variates for \code{newdata} are also returned. 
 }
 
 \value{
 \code{predict} produces a list with the following components: 
-  \item{predict}{matrix of predicted response values. The columns 
-	correspond to the responses variables.}
+  \item{predict}{a three dimensional array of predicted response values. The dimensions 
+	correspond to the observations, the response variables and the model dimension, respectively.}
   \item{variates}{matrix of predicted variates.}
 }
 
 \references{
-Tenenhaus, M. (1998). \emph{La r\'egression PLS: th\'eorie et pratique}. Paris: Editions Technic.  
+Tenenhaus, M. (1998). \emph{La régression PLS: théorie et pratique}. Paris: Editions Technic.  
 }
 
 \author{Sébastien Déjean, Ignacio González and Kim-Anh Lê Cao}

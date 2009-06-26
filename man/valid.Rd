@@ -9,20 +9,14 @@ Function to estimate the root mean squared error of prediction (RMSEP) and the Q
 }
 
 \usage{
-#\method{valid}{default}(
-valid(
-	X, 
-	Y, 
-	ncomp = 3, 
-	mode = c("regression", "invariant", "classic"),
-	max.iter = 500, 
-	tol = 1e-06, 
-        criterion = c('rmsep', 'q2'), 
-	method = c('pls', 'spls'),
-	keep.X = if(method =='pls') NULL else c(rep(ncol(X), ncomp)),
-	keep.Y = if(method =='pls') NULL else c(rep(ncol(Y), ncomp)),
-	validation = c('loo', 'Mfold'),
-	M = if(validation == 'Mfold') 10 else nrow(X))
+valid(X, Y, ncomp = 3,
+      mode = c("regression", "invariant", "classic"),
+      max.iter = 500, tol = 1e-06, criterion = c("rmsep", "q2"),
+      method = c("pls", "spls"),
+      keepX = if(method == "pls") NULL else c(rep(ncol(X), ncomp)),
+      keepY = if(method == "pls") NULL else c(rep(ncol(Y), ncomp)),
+      validation = c("loo", "Mfold"),
+      M = if(validation == 'Mfold') 10 else nrow(X))
 }
 
 \arguments{
@@ -34,9 +28,9 @@ valid(
   \item{tol}{a not negative real, the tolerance used in the iterative algorithm.}
   \item{criterion}{character string. What type of validation criterion to use, see details.}
   \item{method}{ character. PLS or sPLS methods.}
-  \item{keep.X}{if \code{method == 'spls'} numeric vector of length \code{ncomp}, the number of variables
+  \item{keepX}{if \code{method="spls"} numeric vector of length \code{ncomp}, the number of variables
     weights to keep in \eqn{X}-loadings. By default all variables are kept in the model.}
-  \item{keep.Y}{if \code{method == 'spls'} numeric vector of length \code{ncomp}, the number of variables
+  \item{keepY}{if \code{method="spls"} numeric vector of length \code{ncomp}, the number of variables
     weights to keep in \eqn{Y}-loadings. By default all variables are kept in the model.}
   \item{validation}{character.  What kind of (internal) validation to use.  See below.}
   \item{M}{the number of folds in the Mfold cross-validation.}
@@ -92,18 +86,18 @@ and the cumulative \eqn{(Q_{cum}^2)_h} for the extracted components is computed 
   \item{Y.hat}{the predicted values using cross-validation}
   \item{fold}{indicates which folds the samples belong to wen using k-fold cross-validation}
 
-  \item{rmsep}{if \code{validation ='rmsep'} Root Mean Square Error Prediction for each Y variable}
-  \item{RSS}{if \code{validation ='q2'} a matrix of RSS values of the \eqn{Y}-variables for models 
+  \item{rmsep}{if \code{validation="rmsep"} Root Mean Square Error Prediction for each Y variable}
+  \item{RSS}{if \code{validation="q2"} a matrix of RSS values of the \eqn{Y}-variables for models 
     with \eqn{1, \ldots ,\code{ncomp}} components.}
-  \item{PRESS}{if \code{validation ='q2'} prediction error sum of squares of the \eqn{Y}-variables.
+  \item{PRESS}{if \code{validation="q2"} prediction error sum of squares of the \eqn{Y}-variables.
     A matrix of PRESS values for models with \eqn{1, \ldots ,\code{ncomp}} components.}
-  \item{q2}{if \code{validation ='q2'} vector of \eqn{Q^2} values for the extracted components.}
+  \item{q2}{if \code{validation="q2"} vector of \eqn{Q^2} values for the extracted components.}
 
 
 }
 
 \references{
-Tenenhaus, M. (1998). \emph{La r\'egression PLS: th\'eorie et pratique}. Paris: Editions Technic.  
+Tenenhaus, M. (1998). \emph{La régression PLS: théorie et pratique}. Paris: Editions Technic.  
 
 Lê Cao, K. A., Rossouw D., Robert-Granié, C. and Besse, P. (2008). A sparse PLS for variable 
 selection when integrating Omics data. \emph{Statistical Applications in Genetics and Molecular 
@@ -120,10 +114,10 @@ data(linnerud)
 X <- linnerud$exercise
 Y <- linnerud$physiological
 
-# computing the RMSEP with 10-fold CV with pls
-error = valid(X, Y, mode = "regression", ncomp = 3, method = 'pls', validation = 'Mfold', criterion = 'rmsep')
+## computing the RMSEP with 10-fold CV with pls
+error <- valid(X, Y, mode = "regression", ncomp = 3, method = "pls", 
+               validation = "Mfold", criterion = "rmsep")
 error$rmsep 
-
 }
 
 \keyword{regression}

@@ -20,11 +20,11 @@
 
 
 
-"estim.regul" <-
-function(X, ...) UseMethod("estim.regul")
+#"estim.regul" <-
+#function(X, ...) UseMethod("estim.regul")
 
 
-`estim.regul.default` <-
+`estim.regul` <-
 function(X, Y, grid1 = NULL, grid2 = NULL, validation = c("loo", "Mfold"), 
 folds, M = 10, plt = TRUE, ...) 
 {
@@ -61,7 +61,7 @@ lambda1 = lambda[1], lambda2 = lambda[2])
     mat = matrix(cv.score, nrow = length(grid1), ncol = length(grid2))
 
     if (isTRUE(plt)) {
-        img.estim.regul(list(grid1 = grid1, grid2 = grid2, mat = mat))
+        image.estim.regul(list(grid1 = grid1, grid2 = grid2, mat = mat))
     }
 
     opt = cv.score.grid[cv.score.grid[, 3] == max(cv.score.grid[, 3]), ]

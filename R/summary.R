@@ -23,10 +23,10 @@
 
 
 # ------------------------ PLS and sPLS -------------------------
-`summary.pls` <-
+`summary.pls` <- `summary.spls` <-
 function(
 	object, 
-	what = c("all", "summarised", "communalities", "redundancy", "VIP"), 
+	what = c("all", "communalities", "redundancy", "VIP"), 
 	digits = 4, 
 	keep.var = FALSE, 
 	...) 
@@ -35,6 +35,7 @@ ncomp = object$ncomp
 n = nrow(object$X)
 p = ncol(object$X)
 q = ncol(object$Y)
+result = list( )
 
 if (keep.var) {
 gp.X = apply(object$loadings$X, 1, sum) != 0
@@ -44,8 +45,6 @@ else {
 gp.X = 1:p
 gp.Y = 1:q
 }
-
-result = list( )
 
 #----------------------------------------------communauté #
 
@@ -102,9 +101,8 @@ result$Rd.Y = list(own = own, opp = opp)
 
 #-- ------------------------------------------------affichage --#
 #---------------#
-print.gap = 4
 
-if (any(what == "all") || any(what == "summarised") || any(what == "communalities") || any(what == "redundancy") || any(what == "VIP")) {
+if (any(what == "all") || any(what == "communalities") || any(what == "redundancy") || any(what == "VIP")) {
 
 result$ncomp = ncomp
 result$mode = object$mode
@@ -122,7 +120,14 @@ result$VIP = VIP
 
 result$what = what
 result$digits = digits
-if(class(object)[1] == "pls") {result$method = 'pls'} else {result$method = 'spls'} 
+if(class(object)[1] == "pls") {
+    result$method = 'pls'
+	} 
+	else {
+	   result$method = 'spls'
+	   result$keepX = object$keepX
+	   result$keepY = object$keepY
+	} 
 
 class(result) = "summary"
 return(invisible(result))
@@ -135,7 +140,7 @@ return(invisible(result))
 ##---------------------------------------------------------------------------------
 ## ----------------------rCC ----------------
 `summary.rcc` <-
-function(object, what = c("all", "summarised", "communalities",
+function(object, what = c("all", "communalities",
         "redundancy"), ncomp, cutoff = NULL, digits = 4, ...) 
 {
 p = ncol(object$X)

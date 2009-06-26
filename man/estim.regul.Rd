@@ -12,7 +12,7 @@ grid to determine optimal values for the parameters of regularization in
 }
 
 \usage{
-	\method{estim.regul}{default}(X, Y, grid1 = NULL, grid2 = NULL, 
+estim.regul(X, Y, grid1 = NULL, grid2 = NULL, 
             validation = c("loo", "Mfold"), 
             folds, M = 10, plt = TRUE, ...)
 }
@@ -32,7 +32,7 @@ grid to determine optimal values for the parameters of regularization in
   \item{M}{positive integer. Number of folds to use if \code{validation="Mfold"}. Defaults to
     \code{M=10}.}
   \item{plt}{logical argument indicating whether a image map should be
-	plotted by calling the \code{img.estim.regul} function.}
+	plotted by calling the \code{imgCV} function.}
   \item{...}{not used currently.}	
 }
 
@@ -60,7 +60,7 @@ The returned value is a list with components:
 
 \author{Sébastien Déjean and Ignacio González.}
 
-\seealso{\code{\link{loo}}, \code{\link{Mfold}}, \code{\link{img.estim.regul}}.}
+\seealso{\code{\link{loo}}, \code{\link{Mfold}}, \code{\link{image.estim.regul}}.}
 
 \examples{
 data(nutrimouse)

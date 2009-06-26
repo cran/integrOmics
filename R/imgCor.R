@@ -20,9 +20,9 @@
 
 
 
-`imgCor` <- function(X, ...) UseMethod("imgCor")
+#`imgCor` <- function(X, ...) UseMethod("imgCor")
 
-`imgCor.default` <-
+`imgCor` <-
 function(X, Y, type = c("combine", "separated"), col = jet.colors(64), ...) 
 {
 

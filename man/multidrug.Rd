@@ -15,20 +15,22 @@ for anticancer activity.
 
 \usage{data(multidrug)}
 
-\section{Format}{
-\itemize{
-	A list containing the following components: 
-		\item \code{ABC.transp} data matrix with 60 rows and 48 columns. The expression of the 48 human ABC transporters. 
-	    	\item \code{compound} data matrix with 60 rows and 1429 columns. The activity of 1429 drugs for the 60 cell lines.
-		\item \code{comp.name} character vector. The names or the NSC No. of the 1429 compounds. 
-	    	\ item \code{cell.line} a list containing two character vector components: 
-		\item \code{Sample}\qquad  the names of the 60 cell line which were analysed. 
-		\item \code{Class} \qquad\, the phenotypes of the 60 cell lines.				  
-	}
+\format{
+A list containing the following components:
+  \describe{
+    \item{\code{ABC.transp}}{data matrix with 60 rows and 48 columns. 
+		The expression of the 48 human ABC transporters.}
+    \item{\code{compound}}{data matrix with 60 rows and 1429 columns. 
+		The activity of 1429 drugs for the 60 cell lines.}
+	\item{\code{comp.name}}{character vector. The names or the NSC No. of the 1429 compounds.}
+	\item{\code{cell.line}}{a list containing two character vector components:
+		\code{Sample} the names of the 60 cell line which were analysed, and \code{Class} the 
+		phenotypes of the 60 cell lines.}
+  }
 }
 
 \details{
-The data come from a pharmacogenomic study (Szak\'acs \emph{et al.}, 2004) in which two 
+The data come from a pharmacogenomic study (Szakács \emph{et al.}, 2004) in which two 
 kinds of measurements acquired on the NCI-60 cancer cell lines are considered:
   \itemize{
     \item the expression of the 48 human ABC transporters measured by real-time quantitative 
@@ -41,7 +43,7 @@ The NCI-60 panel includes cell lines derived from cancers of colorectal (7 cell 
 ova\-rian(6), breast(8), prostate(2), lung(9) and central nervous system origin(6), as well as leukemias(6) 
 and melanomas(8). It was set up by the Developmental Therapeutics Program of the National Cancer Institute 
 (NCI, one of the U.S. National Institutes of Health) to screen the toxicity of chemical compound repositories.
-The expressions of the 48 human ABC transporters is available as a supplement to the paper of Szak\'acs 
+The expressions of the 48 human ABC transporters is available as a supplement to the paper of Szakács 
 \emph{et al.} (2004).
 
 The drug dataset consiste of 118 compounds whose mechanisms of action are putatively classifiable 
@@ -53,7 +55,7 @@ that included 1429 compounds.
 
 \source{
 The NCI dataset was downloaded from The Genomics and Bioinformatics Group 
-Supplemental Table S1 to the paper of Szak\'acs \emph{et al.} (2004),
+Supplemental Table S1 to the paper of Szakács \emph{et al.} (2004),
 \url{http://discover.nci.nih.gov/abc/2004_cancercell_abstract.jsp#supplement}
 
 The two drug data sets are a companion resource for the paper of 
@@ -68,7 +70,7 @@ Eisen, M. B., Sausville, E. A., Pommier, Y., Botstein, D., Brown, P. O.
 and Weinstein, J. N. (2000). A Gene Expression Database for the Molecular 
 Pharmacology of Cancer. \emph{Nature Genetics}, \bold{24}, 236-244.
 
-Szak\'acs, G., Annereau, J.-P., Lababidi, S., Shankavaram, U., Arciello, A., 
+Szakács, G., Annereau, J.-P., Lababidi, S., Shankavaram, U., Arciello, A., 
 Bussey, K. J., Reinhold, W., Guo, Y., Kruh, G. D., Reimers, M., Weinstein, J. N. 
 and Gottesman, M. M. (2004). Predicting drug sensivity and resistance: 
 Profiling ABC transporter genes in cancer cells. \emph{Cancer Cell} \bold{4}, 147-166.
