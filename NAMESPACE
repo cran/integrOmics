@@ -2,7 +2,7 @@
 export(cim, rcc, jet.colors, estim.regul, imgCor, 
 image.estim.regul, mat.rank, nipals, plotIndiv, plotVar, pls, loo, 
 Mfold, spls, vip, valid, s.match, scatterutil.base, 
-scatterutil.eti, scatterutil.grid, rccNet)
+scatterutil.eti, scatterutil.grid, network)
 
 
 S3method(cim, default)
@@ -32,4 +32,6 @@ S3method(print, spls)
 S3method(print, rcc)
 S3method(print, summary)
 
+S3method(network, spls)
+S3method(network, rcc)
 

@@ -34,6 +34,7 @@ Variates for \code{newdata} are also returned.
   \item{predict}{a three dimensional array of predicted response values. The dimensions 
 	correspond to the observations, the response variables and the model dimension, respectively.}
   \item{variates}{matrix of predicted variates.}
+  \item{B.hat}{matrix of regression coefficients (without the intercept).}
 }
 
 \references{

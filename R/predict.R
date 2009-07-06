@@ -87,5 +87,5 @@ function(object, newdata, ...)
     rownames(Y.hat) = rownames(newdata)
     colnames(Y.hat) = colnames(Y)
 
-    return(invisible(list(predict = Y.hat, variates = t.pred)))
+    return(invisible(list(predict = Y.hat, variates = t.pred, B.hat = B.hat)))
 }

@@ -1,6 +1,9 @@
-\name{rccNet}
+\name{network}
 \encoding{latin1}
-\alias{rccNet}
+\alias{network.rcc}
+\alias{network.spls}
+\alias{network}
+
 
 \title{Relevance Network for (Regularized) CCA}
 
@@ -9,12 +12,19 @@ Display relevance associations network for (regularized) canonical correlation a
 }
 
 \usage{
-rccNet(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL, 
+\method{network}{rcc}(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL, 
        color.node = c("white", "white"), 
        shape.node = c("circle", "rectangle"), 
        color.edge = c("blue", "red"), 
        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-       show.edge.labels = FALSE, interactive = FALSE)
+       show.edge.labels = FALSE, interactive = FALSE, ...)
+	   
+\method{network}{spls}(object, X.names = NULL, Y.names = NULL, 
+       color.node = c("white", "white"), 
+       shape.node = c("circle", "rectangle"), 
+       color.edge = c("blue", "red"), 
+       lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
+       show.edge.labels = FALSE, ...)		   
 }
 
 \arguments{
@@ -35,15 +45,16 @@ rccNet(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL,
 	labels (defaults to \code{FALSE}).}
   \item{interactive}{logical. If \code{TRUE}, a scrollbar is created to change the
     threshold value interactively (defaults to \code{FALSE}). See Details.}
+  \item{...}{not used currently.}
 }
 
 \details{
-\code{rccNet} allows to infer large-scale association networks
-between the \eqn{X} and \eqn{Y} datasets in \code{rcc}. The output is a graph where 
+\code{network} allows to infer large-scale association networks
+between the \eqn{X} and \eqn{Y} datasets in \code{rcc} or \code{spls}. The output is a graph where 
 each \eqn{X}- and \eqn{Y}-variable corresponds to a node and the edges 
 included in the graph portray associations between them.
 
-To identify \eqn{X}-\eqn{Y} pairs showing relevant associations, \code{rccNet} calculate a 
+In \code{rcc}, to identify \eqn{X}-\eqn{Y} pairs showing relevant associations, \code{network} calculate a 
 similarity measure between \eqn{X} and \eqn{Y} variables in a pair-wise manner: the 
 scalar product value between every pairs of vectors in dimension \code{dim} representing 
 the variables \eqn{X} and \eqn{Y} on the axis defined by \eqn{(Z_1,\ldots ,Z_{\code{dim}})}, where 
@@ -52,9 +63,12 @@ the variables \eqn{X} and \eqn{Y} on the axis defined by \eqn{(Z_1,\ldots ,Z_{\c
 
 Variable pairs with a high value (in absolute value) are considered as relevant. 
 By changing the threshold, one can tune the relevance of the associations to include or 
-exclude relationships in the network. 
+exclude relationships in the network.
 
-\code{interactive=TRUE} open two device, one for association network, one for scrollbar
+In \code{spls}, the similarity measure between \eqn{X} and \eqn{Y} variables is given by the 
+regression coefficients matrix without the intercept.
+   
+\code{interactive=TRUE} open two device, one for association network, one for scrollbar,
 and define an interactive process: by clicking either at each end 
 (`\eqn{-}' or `\eqn{+}') of the scrollbar or 
 at middle portion of this. The position of the slider indicate which is the `threshold' value
@@ -90,12 +104,12 @@ a default of \code{c(1, 1)}.
 }
 
 \section{Warning}{
-If \code{treshold} is low (near to zero) and the number of variables is high, the generation of the 
+If the number of variables is high, the generation of the 
 network can take some seconds.
 }
  
 \value{
-\code{rccNet} return a \code{graph} object (see the \pkg{igraph R} package).
+\code{network} return a \code{graph} object (see the \pkg{igraph R} package).
 }
 
 \references{
@@ -110,20 +124,21 @@ and Transcriptome in Human Hepatoma Cells. \emph{Molecular Cancer Therapeutics} 
 199-205.
 }
 
-\author{Sébastien Déjean and Ignacio González.}
+\author{Sébastien Déjean, Ignacio González and Kim-Anh Lê Cao.}
 
 \examples{
 require(igraph)
 
+## network representation for objects of class 'rcc'
 data(nutrimouse)
 X <- nutrimouse$lipid
 Y <- nutrimouse$gene
 nutri.res <- rcc(X, Y, lambda1 = 0.064, lambda2 = 0.008)
 
-rccNet(nutri.res, ncomp = 3, threshold = 0.6)
+network(nutri.res, ncomp = 3, threshold = 0.6)
 
 ## Changing the attributes of the network
-rccNet(nutri.res, ncomp = 3, threshold = 0.6,
+network(nutri.res, ncomp = 3, threshold = 0.6,
         color.node = c("mistyrose", "lightcyan"),
         shape.node = c("circle", "rectangle"), 
         color.edge = c("blue", "red"),
@@ -133,9 +148,34 @@ rccNet(nutri.res, ncomp = 3, threshold = 0.6,
 
 ## interactive 'threshold' 
 \dontrun{
-rccNet(nutri.res, ncomp = 3, threshold = 0.55, interactive = TRUE)
+network(nutri.res, ncomp = 3, threshold = 0.55, interactive = TRUE)
 ## select the 'threshold' and "see" the new network
 }
+
+## network representation for objects of class 'spls'
+data(liver.toxicity)
+X <- liver.toxicity$gene
+Y <- liver.toxicity$clinic
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(5, 1, 1), keepY = c(10, 10, 10))
+	
+network(toxicity.spls, 
+        X.names = NULL, Y.names = NULL,
+        color.node = c("mistyrose", "lightcyan"),
+        shape.node = c("rectangle", "circle"), 
+		color.edge = c("blue", "red"),
+        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
+        show.edge.labels = FALSE) 	
+
+		
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(10, 10, 10), keepY = c(10, 10, 10))
+	
+network(toxicity.spls, 
+        X.names = 1:ncol(X), Y.names = NULL,
+        color.node = c("mistyrose", "lightcyan"),
+        shape.node = c("circle", "rectangle"), 
+		color.edge = c("blue", "red"),
+        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
+        show.edge.labels = FALSE)
 }
 
 \keyword{multivariate}
