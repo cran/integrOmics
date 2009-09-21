@@ -10,7 +10,7 @@ in a one-step strategy.
 }
 
 \usage{
-spls(X, Y, ncomp = 3, mode = c("regression", "canonical"),
+spls(X, Y, ncomp = 2, mode = c("regression", "canonical"),
      max.iter = 500, tol = 1e-06, keepX = c(rep(ncol(X), ncomp)), 
      keepY = c(rep(ncol(Y), ncomp)), scaleY = TRUE)
 }	

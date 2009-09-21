@@ -20,37 +20,44 @@
 
 
 
-
-cim.rcc <-
-function(object, dim, X.names = NULL, Y.names = NULL, ...) 
+cim.spls <-
+function(object, dim, X.names = NULL, Y.names = NULL, keep.var = TRUE, ...) 
 {
 
     p = ncol(object$X)
     q = ncol(object$Y)
 
-    if (!is.numeric(dim) || dim < 1)
+    if (!is.numeric(dim) || dim < 1 || dim > p)
         stop("invalid number for the dimensionality 'dim'.")
-    else if(dim > min(p, q)) {
-        warning("Reset the dimensionality 'dim' to min(ncol(X), ncol(Y)) = ", min(p, q))
-        dim = min(p, q)
-    }
-	
+		
     if (length(X.names) != p & !is.null(X.names))
         stop("'X.names' must be a character vector of length ", p, ".")
 		
     if (length(Y.names) != q & !is.null(Y.names))
         stop("'Y.names' must be a character vector of length ", q, ".")
-
+    
     dim = round(dim)
 
-    if (is.null(X.names)) X.names = object$names$X
-    if (is.null(Y.names)) Y.names = object$names$Y
-
-    bisect = object$variates$X[, 1:dim] + object$variates$Y[, 1:dim]
-    cord.X = cor(object$X, bisect, use = "pairwise")
-    cord.Y = cor(object$Y, bisect, use = "pairwise")
-    simMat = as.matrix(cord.X %*% t(cord.Y))
-
+    if (keep.var) {
+        keep.X = apply(abs(object$loadings$X), 1, sum) > 0
+        keep.Y = apply(abs(object$loadings$Y), 1, sum) > 0
+        cord.X = cor(object$X[, keep.X], object$variates$X[, 1:dim], 
+                     use = "pairwise")
+        cord.Y = cor(object$Y[, keep.Y], object$variates$X[, 1:dim], 
+                     use = "pairwise")					 
+		
+		if (is.null(X.names)) X.names = object$names$X[keep.X]
+	    if (is.null(Y.names)) Y.names = object$names$Y[keep.Y]
+    }
+    else {
+        cord.X = cor(object$X, object$variates$X[, 1:dim], use = "pairwise")
+        cord.Y = cor(object$Y, object$variates$X[, 1:dim], use = "pairwise")
+		
+		if (is.null(X.names)) X.names = object$names$X
+	    if (is.null(Y.names)) Y.names = object$names$Y
+    }
+	
+	simMat = cord.X %*% t(cord.Y)
 	if (ncol(simMat) < nrow(simMat)) {
         simMat = t(simMat)
         aux.names = X.names
@@ -61,4 +68,3 @@ function(object, dim, X.names = NULL, Y.names = NULL, ...)
     result = cim(simMat, labRow = X.names, labCol = Y.names, ...)
     return(invisible(result))
 }
-

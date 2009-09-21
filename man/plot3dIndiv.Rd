@@ -108,7 +108,6 @@ col <- rainbow(48)[Time.Group]
 plot3dIndiv(toxicity.spls, ind.names = FALSE, 
                  col = col, cex = 0.3, axes.box = "both")		  
 }
-
 }
 
 \keyword{multivariate}

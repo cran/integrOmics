@@ -100,10 +100,10 @@ Y <- nutrimouse$gene
 nutri.res <- rcc(X, Y, 0.064, 0.008)
 
 # default
-plot3dVar.rcc(nutri.res)
+plot3dVar(nutri.res)
 
 # cutoff active, labeling the variables
-plot3dVar.rcc(nutri.res, cutoff = 0.7, X.label = TRUE, cex = c(0.8, 0.8))
+plot3dVar(nutri.res, cutoff = 0.7, X.label = TRUE, cex = c(0.8, 0.8))
 
 ## 3D variable representation for objects of class 'pls' or 'spls'
 data(liver.toxicity)

@@ -67,7 +67,7 @@ can be given its own graphic attributes (see \code{\link{par}}). Default values 
 
 \author{Sébastien Déjean and Ignacio González.}
 
-\seealso{\code{\link{plotVar}}, \code{\link{text}}, \code{\link{points}}.}
+\seealso{\code{\link{plot3dIndiv}}, \code{\link{text}}, \code{\link{points}}.}
 
 
 \examples{

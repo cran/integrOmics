@@ -19,13 +19,13 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-#"rcc" <-
-#function(...) UseMethod("rcc")
+
 
 
 "rcc" <-
 function(X, Y, lambda1 = 0, lambda2 = 0, ...) 
 {
+
 # validation des arguments #
 #--------------------------#
 if (length(dim(X)) != 2 || length(dim(Y)) != 2) 

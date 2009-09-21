@@ -1,7 +1,7 @@
 Package: integrOmics
 Type: Package
 Title: Integrate Omics data project
-Version: 2.4
+Version: 2.5
 Date: 2009-09-21
 Depends: igraph, rgl
 Author: Sebastien Dejean, Ignacio Gonzalez and Kim-Anh Le Cao
@@ -20,6 +20,6 @@ Description: The package supplies two efficients methodologies:
         regression and canonical analysis. Numerous graphical outputs
         are provided to help interpreting the results.
 License: GPL (>= 2)
-Packaged: 2009-09-23 01:42:00 UTC; k.lecao
+Packaged: 2009-11-12 21:34:51 UTC; k.lecao
 Repository: CRAN
-Date/Publication: 2009-09-23 16:45:31
+Date/Publication: 2009-11-13 10:43:26

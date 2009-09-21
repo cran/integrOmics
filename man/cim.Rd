@@ -3,6 +3,7 @@
 \alias{cim}
 \alias{cim.default}
 \alias{cim.rcc}
+\alias{cim.spls}
 
 \title{Clustered Image Maps (CIMs) ("heat maps")}
 
@@ -13,6 +14,7 @@ represent "high-dimensional" data sets.
 
 \usage{
 \method{cim}{default}(mat, breaks, col = jet.colors, 
+    distfun = dist, hclustfun = hclust,
     labRow = NULL, labCol = NULL, symkey = TRUE, zoom = FALSE, 
     main = NULL, xlab = NULL, ylab = NULL, keysize = 1, 
     cexRow = min(1, 0.2 + 1/log10(nr)), 
@@ -20,6 +22,8 @@ represent "high-dimensional" data sets.
     margins = c(5, 5), lhei = NULL, lwid = NULL, ...)
 			
 \method{cim}{rcc}(object, dim, X.names = NULL, Y.names = NULL, ...)
+
+\method{cim}{spls}(object, dim, X.names = NULL, Y.names = NULL, keep.var = TRUE, ...)
 }
 
 \arguments{
@@ -28,6 +32,13 @@ represent "high-dimensional" data sets.
   \item{dim}{the dimensionality to adequately account for the data association.}
   \item{X.names, Y.names}{character vector containing the names of \eqn{X}- and  
     \eqn{Y}-variables.}
+  \item{keep.var}{boolean. If \code{TRUE} only the variables with loadings not zero are plotted
+    (as selected by \code{spls}). Defaults to \code{TRUE}.}	
+  \item{distfun}{function used to compute the distance (dissimilarity) between both rows and columns. 
+    Defaults to \code{\link[stats]{dist}}.} 
+  \item{hclustfun}{function used to compute the hierarchical clustering for both rows and columns. 
+    Defaults to \code{\link[stats]{hclust}}. Should take as argument a result of \code{distfun} and return 
+    an object to which \code{as.dendrogram} can be applied.}
   \item{breaks}{(optional) either a numeric vector indicating the splitting points for 
     binning \code{mat} into colors, or a integer number of break points to be used, in 
 	which case the break points will be spaced equally between \code{min(mat)} 
@@ -58,13 +69,19 @@ One matrix Clustered Image Map (default method) is a 2-dimensional visualization
 real-valued matrix (basically \code{\link{image}(t(mat))}) with a dendrogram added to the 
 left side and to the top. The rows and columns are reordered according to some hierarchical
 clustering method to identify interesting patterns. By default the used clustering method for
-rows and columns is the \emph{complete linkage} method. 
+rows and columns is the \emph{complete linkage} method and the used distance measure is the distance
+\emph{euclidean}. 
  
 In \code{cim.rcc} method, the matrix \code{mat} is created where element \eqn{(i,j)} is the
 scalar product value between every pairs of vectors in dimension \code{dim} representing 
 the variables \eqn{X_i} and \eqn{Y_j} on the axis defined by \eqn{(Z_1,\ldots ,Z_\code{dim})}, where 
 \eqn{Z_i}, \eqn{i=1, \ldots ,}\code{dim}, is the bisector vector between the \eqn{i}-th \eqn{X} and 
 \eqn{Y} canonical variate.
+
+In \code{spls}, the element \eqn{(i,j)} of the similarity matrix \code{mat} is given 
+by the scalar product value between every pairs of vectors in dimension \code{dim} representing 
+the variables \eqn{X_i} and \eqn{Y_j} on the axis defined by \eqn{(U_1,\ldots ,U_\code{dim})}, where 
+\eqn{U_i}, \eqn{i=1, \ldots ,}\code{dim}, is the \eqn{i}-th \eqn{X} variate.
 
 For visualization of "high-dimensional" data sets, a nice zooming tool was created. 
 \code{zoom=TRUE} open a new device, one for CIM, one for zoom-out region and
@@ -102,23 +119,42 @@ pharmacology of cancer. \emph{Science} \bold{275}, 343-349.
 
 \author{Sébastien Déjean and Ignacio González.}
 
-\seealso{\code{\link{image}}, \code{\link{heatmap}}, \code{\link{hclust}}.}
+\seealso{\code{\link{image}}, \code{\link{heatmap}}, \code{\link{hclust}}, \code{\link{plotVar}}, 
+\code{\link{plot3dVar}}, \code{\link{network}}.}
 
 \examples{
+## default method
 data(nutrimouse)
 X <- nutrimouse$lipid
 Y <- nutrimouse$gene
+
+cim(cor(X, Y))
+
+## CIM representation for objects of class 'rcc'
 nutri.res <- rcc(X, Y, lambda1 = 0.064, lambda2 = 0.008)
 
 dends <- cim(nutri.res, dim = 3, xlab = "genes", 
-             ylab = "lipids", margins = c(5, 6))		
-plot(dends$ddr, axes = FALSE)
+             ylab = "lipids", margins = c(5, 6))
+
+op <- par(mar = c(5, 4, 4, 4), cex = 0.8)			 
+plot(dends$ddr, axes = FALSE, horiz = TRUE)
+par(op)
 
 ## interactive 'zoom' 
 \dontrun{
 cim(nutri.res, dim = 3, zoom = TRUE)
 ## select the region and "see" the zoom-out region
 }
+
+## CIM representation for objects of class 'spls'
+data(liver.toxicity)
+X <- liver.toxicity$gene
+Y <- liver.toxicity$clinic
+
+toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(50, 50, 50), 
+                      keepY = c(10, 10, 10))
+
+cim(toxicity.spls, dim = 3)
 }
 
 \keyword{multivariate}

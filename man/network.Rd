@@ -18,14 +18,15 @@ and (sparse) PLS regression.
         shape.node = c("circle", "rectangle"), 
         color.edge = c("blue", "red"), 
         lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-        show.edge.labels = FALSE, interactive = FALSE, ...)
-	   
-\method{network}{spls}(object, X.names = NULL, Y.names = NULL, 
-        color.node = c("white", "white"), 
+        show.edge.labels = FALSE, interactive = FALSE, ...)	
+
+\method{network}{spls}(object, ncomp, threshold = 0.5, 
+        X.names = NULL, Y.names = NULL, keep.var = TRUE, 
+        color.node = c("white", "white"),
         shape.node = c("circle", "rectangle"), 
-        color.edge = c("blue", "red"), 
+        color.edge = c("blue", "red"),
         lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-        show.edge.labels = FALSE, ...)		   
+        show.edge.labels = FALSE, interactive = FALSE, ...)		
 }
 
 \arguments{
@@ -35,6 +36,8 @@ and (sparse) PLS regression.
     threshold for the relevant associations network (see Details).}
   \item{X.names, Y.names}{character vector containing the names of \eqn{X}- and  
     \eqn{Y}-variables.}
+  \item{keep.var}{boolean. If \code{TRUE} only the variables with loadings not zero are plotted
+    (as selected by \code{spls}). Defaults to \code{TRUE}.}
   \item{color.node}{vector of length two, the colors of the \eqn{X} and  
     \eqn{Y}	nodes (see Details).}
   \item{shape.node}{character vector of length two, the shape of the \eqn{X} and  
@@ -62,12 +65,14 @@ the variables \eqn{X} and \eqn{Y} on the axis defined by \eqn{(Z_1,\ldots ,Z_{\c
 \eqn{Z_i}, \eqn{i=1, \ldots ,}\code{dim}, is the bisector vector between the \eqn{i}-th \eqn{X} and 
 \eqn{Y} canonical variate. 
 
-Variable pairs with a high value (in absolute value) are considered as relevant. 
+In \code{spls}, the similarity measure between \eqn{X} and \eqn{Y} variables is given
+by the scalar product value between every pairs of vectors in dimension \code{dim} representing 
+the variables \eqn{X} and \eqn{Y} on the axis defined by \eqn{(U_1,\ldots ,U_\code{dim})}, where 
+\eqn{U_i}, \eqn{i=1, \ldots ,}\code{dim}, is the \eqn{i}-th \eqn{X} variate.
+
+Variable pairs with a high similarity measure (in absolute value) are considered as relevant. 
 By changing the threshold, one can tune the relevance of the associations to include or 
 exclude relationships in the network.
-
-In \code{spls}, the similarity measure between \eqn{X} and \eqn{Y} variables is given by the 
-regression coefficients matrix without the intercept.
    
 \code{interactive=TRUE} open two device, one for association network, one for scrollbar,
 and define an interactive process: by clicking either at each end 
@@ -127,6 +132,8 @@ and Transcriptome in Human Hepatoma Cells. \emph{Molecular Cancer Therapeutics} 
 
 \author{Sébastien Déjean, Ignacio González and Kim-Anh Lê Cao.}
 
+\seealso{\code{\link{plotVar}}, \code{\link{plot3dVar}}, \code{\link{cim}}.}
+
 \examples{
 require(igraph)
 
@@ -158,27 +165,15 @@ data(liver.toxicity)
 X <- liver.toxicity$gene
 Y <- liver.toxicity$clinic
 toxicity.spls <- spls(X, Y, ncomp = 3,
-                      keepX = c(5, 1, 1), keepY = c(10, 10, 10))
+                      keepX = c(50, 50, 50), keepY = c(10, 10, 10))
 	
-network(toxicity.spls, 
-        X.names = NULL, Y.names = NULL,
+network(toxicity.spls, ncomp = 3, threshold = 0.8, 
+        X.names = NULL, Y.names = NULL, keep.var = TRUE,
         color.node = c("mistyrose", "lightcyan"),
         shape.node = c("rectangle", "circle"),
         color.edge = c("blue", "red"),
         lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-        show.edge.labels = FALSE) 	
-
-		
-toxicity.spls <- spls(X, Y, ncomp = 3,
-                      keepX = c(10, 10, 10), keepY = c(10, 10, 10))
-	
-network(toxicity.spls, 
-        X.names = 1:ncol(X), Y.names = NULL,
-        color.node = c("mistyrose", "lightcyan"),
-        shape.node = c("circle", "rectangle"),
-        color.edge = c("blue", "red"),
-        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-        show.edge.labels = FALSE)
+        show.edge.labels = FALSE, interactive = FALSE)
 }
 
 \keyword{multivariate}

@@ -51,15 +51,12 @@ function(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL,
 	q = ncol(object$Y)
 
 	if (missing(ncomp) || is.null(ncomp) || !is.numeric(ncomp) || ncomp <= 0)
-    stop("missing or invalid number of canonical variates, 'ncomp'.")
+        stop("missing or invalid number of canonical variates, 'ncomp'.")
     else if(ncomp > min(p, q)) {
-	warning("Reset maximum number of canonical variates 'ncomp' to min(ncol(X), ncol(Y)) = ",
+	    warning("Reset maximum number of canonical variates 'ncomp' to min(ncol(X), ncol(Y)) = ",
 		min(p, q))
-	ncomp = min(p, q)
+	    ncomp = min(p, q)
 	}
-
-	if (is.null(threshold) || !is.numeric(threshold) || threshold < 0)
-    stop("invalid value for 'threshold'.")
 
 	if (is.null(X.names)) X.names = object$names$X
 	if (is.null(Y.names)) Y.names = object$names$Y
@@ -71,6 +68,10 @@ function(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL,
 	cord.Y = cor(object$Y, bisect, use = "pairwise")
 	simMat = cord.X %*% t(cord.Y)
 	simMat = as.vector(t(simMat))
+	
+	if (is.null(threshold) || !is.numeric(threshold) || threshold < 0 || 
+        threshold > max(abs(simMat)))
+        stop("Invalid value for 'threshold', it must be a positive numeric value < ", max(abs(simMat)))
 
 	# Définition des sommets #
 	#------------------------#

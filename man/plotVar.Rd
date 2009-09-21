@@ -67,7 +67,7 @@ the \eqn{Y} attributs. Default values exist for this arguments.
 
 \author{Sébastien Déjean and Ignacio González.}
 
-\seealso{\code{\link{plotIndiv}}, \code{\link{cim}}, \code{\link{par}}.}
+\seealso{\code{\link{plot3dVar}}, \code{\link{cim}}, \code{\link{network}}, \code{\link{par}}.}
 
 \examples{
 ## variable representation for objects of class 'rcc'
