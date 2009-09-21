@@ -27,7 +27,8 @@ function(
 	max.iter = 500, 
 	tol = 1e-06,
 	keepX = c(rep(ncol(X), ncomp)), 
-	keepY = c(rep(ncol(Y), ncomp))
+	keepY = c(rep(ncol(Y), ncomp)),
+	scaleY = TRUE    
 	)
 {
 
@@ -98,7 +99,8 @@ call. = FALSE)
 
 #-- centrer et réduire les données --#
 X = scale(X, center = TRUE, scale = TRUE)
-Y = scale(Y, center = TRUE, scale = TRUE)
+if(scaleY == TRUE) Y = scale(Y, center = TRUE, scale = TRUE) 
+
 
 X.temp = X.na = X
 Y.temp = Y.na = Y
@@ -135,7 +137,7 @@ u = u / drop(sqrt(crossprod(u)))
 
 iter = 1
 
-#-- bucle jusqu'à convergence de a et de b --#
+#-- boucle jusqu'à convergence de a et de b --#
 repeat {
 a = t(X.temp) %*% u
 b = t(Y.temp) %*% t

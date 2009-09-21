@@ -11,7 +11,7 @@
 \usage{
 pls(X, Y, ncomp = 3, 
     mode = c("regression", "canonical", "invariant", "classic"), 
-    max.iter = 500, tol = 1e-06)
+    max.iter = 500, tol = 1e-06, scaleY=TRUE)
 }	
 
 \arguments{
@@ -25,6 +25,8 @@ pls(X, Y, ncomp = 3,
 	See Details.}
   \item{max.iter}{integer, the maximum number of iterations.}
   \item{tol}{a not negative real, the tolerance used in the iterative algorithm.}
+  \item{scaleY}{should the Y data be scaled ? In the case of a 'discriminant' version of the PLS
+where the Y data are of discrete type, this should be set to \code{FALSE}.}
   \item{...}{not used currently.}
 
 }

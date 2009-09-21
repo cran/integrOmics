@@ -22,7 +22,7 @@
 
 `pls` <-
 function(X, Y, ncomp = 3, mode = c("regression", "canonical", "invariant", "classic"),
-max.iter = 500, tol = 1e-06)
+max.iter = 500, tol = 1e-06, scaleY = TRUE)
 {
 
 
@@ -85,7 +85,7 @@ rownames(X) = rownames(Y) = ind.names
 
 #-- centrer et réduire les données --#
 X = scale(X, center = TRUE, scale = TRUE)
-Y = scale(Y, center = TRUE, scale = TRUE)
+if(scaleY == TRUE) Y = scale(Y, center = TRUE, scale = TRUE) 
 
 X.temp = X.na = X
 Y.temp = Y.na = Y

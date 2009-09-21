@@ -12,7 +12,7 @@ in a one-step strategy.
 \usage{
 spls(X, Y, ncomp = 3, mode = c("regression", "canonical"),
      max.iter = 500, tol = 1e-06, keepX = c(rep(ncol(X), ncomp)), 
-     keepY = c(rep(ncol(Y), ncomp)))
+     keepY = c(rep(ncol(Y), ncomp)), scaleY = TRUE)
 }	
 
 \arguments{
@@ -29,6 +29,8 @@ spls(X, Y, ncomp = 3, mode = c("regression", "canonical"),
    to keep in \eqn{X}-loadings. By default all variables are kept in the model.}
   \item{keepY}{numeric vector of length \code{ncomp}, the number of variables
    to keep in \eqn{Y}-loadings. By default all variables are kept in the model.}
+  \item{scaleY}{should the Y data be scaled ? In the case of a 'discriminant' version of the sPLS
+where the Y data are of discrete type, this should be set to \code{FALSE}.}
   \item{...}{not used currently.}
 }
 

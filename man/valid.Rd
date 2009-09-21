@@ -15,6 +15,7 @@ valid(X, Y, ncomp = 3,
       method = c("pls", "spls"),
       keepX = if(method == "pls") NULL else c(rep(ncol(X), ncomp)),
       keepY = if(method == "pls") NULL else c(rep(ncol(Y), ncomp)),
+      scaleY = TRUE,
       validation = c("loo", "Mfold"),
       M = if(validation == 'Mfold') 10 else nrow(X))
 }
@@ -27,11 +28,13 @@ valid(X, Y, ncomp = 3,
   \item{max.iter}{integer, the maximum number of iterations.}
   \item{tol}{a not negative real, the tolerance used in the iterative algorithm.}
   \item{criterion}{character string. What type of validation criterion to use, see details.}
-  \item{method}{ character. PLS or sPLS methods.}
+  \item{method}{ character. \code{pls} or \code{spls} methods.}
   \item{keepX}{if \code{method="spls"} numeric vector of length \code{ncomp}, the number of variables
     weights to keep in \eqn{X}-loadings. By default all variables are kept in the model.}
   \item{keepY}{if \code{method="spls"} numeric vector of length \code{ncomp}, the number of variables
     weights to keep in \eqn{Y}-loadings. By default all variables are kept in the model.}
+  \item{scaleY}{should the Y data be scaled ? In the case of a 'discriminant' version of the (s)PLS
+where the Y data are of discrete type, this should be set to \code{FALSE}.}
   \item{validation}{character.  What kind of (internal) validation to use.  See below.}
   \item{M}{the number of folds in the Mfold cross-validation.}
 

@@ -38,6 +38,7 @@ function(
 	method = c('pls', 'spls'),
 	keepX = if(method =='pls') NULL else c(rep(ncol(X), ncomp)),
 	keepY = if(method =='pls') NULL else c(rep(ncol(Y), ncomp)),
+	scaleY = TRUE,
 	validation = c('loo', 'Mfold'),
 	M = if(validation == 'Mfold') 10 else nrow(X)
 	){
@@ -88,7 +89,7 @@ q2Vcum = matrix(0, nrow = q, ncol = ncomp)
 
 #--center and scale data --#
 X = scale(X, center = TRUE, scale = TRUE)
-Y = scale(Y, center = TRUE, scale = TRUE)
+if(scaleY == TRUE) Y = scale(Y, center = TRUE, scale = TRUE) 
 
 
 
@@ -106,9 +107,7 @@ c.all = object$mat.c
 
 for (h in 1:ncomp) {
 	W.all = a.all[, 1:h] %*% solve(t(c.all[, 1:h]) %*% a.all[, 1:h]) 
-##	B.all[,,h] = W.all %*% t(b.all[, 1:h])       #changed to deal with q=1 :
 	if(q==1){B.all[,,h] = W.all %*% as.vector(t(b.all[, 1:h]))} else {B.all[,,h] = W.all %*% t(b.all[, 1:h])}
-#	Y.all[,,h] = X %*% B.all[,,h] + colMeans(Y)
 	Y.all[,,h] = X %*% B.all[,,h]
 
 	RSS[, h] = apply((Y - Y.all[,,h])^2, 2, sum)    # on all data
@@ -161,10 +160,8 @@ for(h in 1:ncomp){
 
 # ----compute RMSEP --------------------
 if(any(criterion =='rmsep')){
-##Y.c = scale(Y, center = TRUE, scale = TRUE)
 rmsep.mat = matrix(nrow=q, ncol=ncomp)
 for (j in 1:q){
-#	rmsep.mat[j,] = sqrt(colMeans((Y.hat.rmsep[,j,1:ncomp] - Y.c[,j])^2))
 	if(ncomp==1) {rmsep.mat[j,] = sqrt(mean((Y.hat.rmsep[,j,1] - Y[,j])^2))} else {rmsep.mat[j,] = sqrt(colMeans((Y.hat.rmsep[,j,1:ncomp] - Y[,j])^2))}
 	}
 
@@ -187,22 +184,10 @@ if(q==1){q2 = 1- PRESS/RSS.0}else{q2 = 1- apply(PRESS, 2, sum)/apply(RSS.0, 2, s
 q2V = 1- PRESS/RSS.0      #if q=1, then q2V = q2
 
 
-#sumPRESS = apply(PRESS, 1, sum)  # ici il fallait sum sur les colonnes !
-#sumRSS = apply(RSS.0, 1, sum)
-#q2V = 1 - PRESS/RSS.0
-#q2 = 1 - sumPRESS/sumRSS
-#q2Vcum = 1 - apply(PRESS/RSS.0, 1, cumprod)  # TO KEEP OR NOT ? if keep don t add negatives values (set them to zero)
-#q2cum = 1 - cumprod(sumPRESS/sumRSS)         # TO KEEP OR NOT ?
-
-
-
 if(q!=1){rownames(q2V) = rownames(q2Vcum) = colnames(Y)}
 rownames(PRESS) = rownames(RSS) = colnames(Y)
-###if(q==1){names(q2V) = paste("comp", 1:ncomp)}else{colnames(q2) = paste("comp", 1:ncomp)}
-##colnames(q2V) = colnames(q2Vcum) = paste("comp", 1:ncomp)
 colnames(PRESS) = colnames(RSS) = paste("comp", 1:ncomp)
 if(q==1){colnames(q2) = colnames(q2V) = paste("comp", 1:ncomp)}else{names(q2) = colnames(q2V) = paste("comp", 1:ncomp)}
-##names(q2) = names(q2cum) = paste("comp", 1:ncomp)
 
 }  #end if
 
@@ -212,9 +197,6 @@ Y.hat = Y.hat.rmsep,
 fold=fold,
 rmsep = if (any(criterion == 'rmsep')) rmsep.mat else NULL, 
 Q2 = if (any(criterion == 'q2')) { list(RSS=RSS, PRESS=PRESS, q2 = q2, q2V = q2V)} else NULL 
-
-##	q2Vcum = q2Vcum,            #remove? 
-##	q2cum = q2cum)              #remove?
 
 )))
 }

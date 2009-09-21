@@ -4,27 +4,28 @@
 \alias{network.spls}
 \alias{network}
 
-
-\title{Relevance Network for (Regularized) CCA}
+\title{Relevance Network for (Regularized) CCA and (sparse) PLS regression}
 
 \description{
-Display relevance associations network for (regularized) canonical correlation analysis. 
+Display relevance associations network for (regularized) canonical correlation analysis 
+and (sparse) PLS regression. 
 }
 
 \usage{
-\method{network}{rcc}(object, ncomp, threshold = 0.5, X.names = NULL, Y.names = NULL, 
-       color.node = c("white", "white"), 
-       shape.node = c("circle", "rectangle"), 
-       color.edge = c("blue", "red"), 
-       lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-       show.edge.labels = FALSE, interactive = FALSE, ...)
+\method{network}{rcc}(object, ncomp, threshold = 0.5, 
+        X.names = NULL, Y.names = NULL, 
+        color.node = c("white", "white"), 
+        shape.node = c("circle", "rectangle"), 
+        color.edge = c("blue", "red"), 
+        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
+        show.edge.labels = FALSE, interactive = FALSE, ...)
 	   
 \method{network}{spls}(object, X.names = NULL, Y.names = NULL, 
-       color.node = c("white", "white"), 
-       shape.node = c("circle", "rectangle"), 
-       color.edge = c("blue", "red"), 
-       lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
-       show.edge.labels = FALSE, ...)		   
+        color.node = c("white", "white"), 
+        shape.node = c("circle", "rectangle"), 
+        color.edge = c("blue", "red"), 
+        lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
+        show.edge.labels = FALSE, ...)		   
 }
 
 \arguments{
@@ -156,24 +157,26 @@ network(nutri.res, ncomp = 3, threshold = 0.55, interactive = TRUE)
 data(liver.toxicity)
 X <- liver.toxicity$gene
 Y <- liver.toxicity$clinic
-toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(5, 1, 1), keepY = c(10, 10, 10))
+toxicity.spls <- spls(X, Y, ncomp = 3,
+                      keepX = c(5, 1, 1), keepY = c(10, 10, 10))
 	
 network(toxicity.spls, 
         X.names = NULL, Y.names = NULL,
         color.node = c("mistyrose", "lightcyan"),
-        shape.node = c("rectangle", "circle"), 
-		color.edge = c("blue", "red"),
+        shape.node = c("rectangle", "circle"),
+        color.edge = c("blue", "red"),
         lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
         show.edge.labels = FALSE) 	
 
 		
-toxicity.spls <- spls(X, Y, ncomp = 3, keepX = c(10, 10, 10), keepY = c(10, 10, 10))
+toxicity.spls <- spls(X, Y, ncomp = 3,
+                      keepX = c(10, 10, 10), keepY = c(10, 10, 10))
 	
 network(toxicity.spls, 
         X.names = 1:ncol(X), Y.names = NULL,
         color.node = c("mistyrose", "lightcyan"),
-        shape.node = c("circle", "rectangle"), 
-		color.edge = c("blue", "red"),
+        shape.node = c("circle", "rectangle"),
+        color.edge = c("blue", "red"),
         lty.edge = c("solid", "solid"), lwd.edge = c(1, 1), 
         show.edge.labels = FALSE)
 }
